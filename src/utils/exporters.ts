@@ -40,7 +40,7 @@ export function exportCsv(tree: FamilyTree): void {
   const headers = ['id', 'firstName', 'lastName', 'gender', 'birthDate', 'birthPlace', 'deathDate', 'deathPlace', 'notes'];
   const rows = tree.persons.map((p) =>
     headers.map((h) => {
-      const val = (p as Record<string, unknown>)[h] ?? '';
+      const val = (p as unknown as Record<string, unknown>)[h] ?? '';
       return `"${String(val).replace(/"/g, '""')}"`;
     }).join(',')
   );

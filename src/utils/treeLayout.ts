@@ -1,5 +1,7 @@
-import { graphlib, layout } from '@dagrejs/dagre';
+import * as dagre from '@dagrejs/dagre';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 import type { Node, Edge } from '@xyflow/react';
+type AnyNode = Node<Record<string, unknown>>;
 import type { FamilyTree } from '../types';
 
 const PERSON_W = 180;
@@ -7,8 +9,8 @@ const PERSON_H = 80;
 const FAMILY_W = 20;
 const FAMILY_H = 20;
 
-export function buildTreeLayout(tree: FamilyTree): { nodes: Node[]; edges: Edge[] } {
-  const g = new graphlib.Graph();
+export function buildTreeLayout(tree: FamilyTree): { nodes: AnyNode[]; edges: Edge[] } {
+  const g = new dagre.graphlib.Graph();
   g.setGraph({ rankdir: 'TB', ranksep: 80, nodesep: 40, marginx: 20, marginy: 20 });
   g.setDefaultEdgeLabel(() => ({}));
 
@@ -33,9 +35,9 @@ export function buildTreeLayout(tree: FamilyTree): { nodes: Node[]; edges: Edge[
     }
   }
 
-  layout(g);
+  dagre.layout(g);
 
-  const rfNodes: Node[] = [];
+  const rfNodes: AnyNode[] = [];
   const rfEdges: Edge[] = [];
 
   // Person nodes

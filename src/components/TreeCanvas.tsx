@@ -1,15 +1,18 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { ReactFlow, Background, Controls, MiniMap, useNodesState, useEdgesState } from '@xyflow/react';
-import type { NodeMouseHandler } from '@xyflow/react';
+import type { Node, NodeMouseHandler, NodeTypes } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { PersonNode } from './PersonNode';
 import { FamilyConnectorNode } from './FamilyConnectorNode';
 import { buildTreeLayout } from '../utils/treeLayout';
 import type { FamilyTree, Person } from '../types';
 
-const nodeTypes = {
-  personNode: PersonNode,
-  familyConnectorNode: FamilyConnectorNode,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyNode = Node<Record<string, any>>;
+
+const nodeTypes: NodeTypes = {
+  personNode: PersonNode as NodeTypes[string],
+  familyConnectorNode: FamilyConnectorNode as NodeTypes[string],
 };
 
 interface TreeCanvasProps {
@@ -19,7 +22,7 @@ interface TreeCanvasProps {
 
 export function TreeCanvas({ tree, onPersonSelect }: TreeCanvasProps) {
   const initialLayout = useMemo(() => buildTreeLayout(tree), []);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialLayout.nodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState<AnyNode>(initialLayout.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialLayout.edges);
 
   // Re-sync when tree data changes

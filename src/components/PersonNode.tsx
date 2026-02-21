@@ -1,11 +1,11 @@
 import { Handle, Position } from '@xyflow/react';
-import type { NodeProps } from '@xyflow/react';
+import type { Node, NodeProps } from '@xyflow/react';
 import type { Person } from '../types';
 
-type PersonNodeData = { person: Person };
+export type PersonNodeType = Node<{ person: Person }, 'personNode'>;
 
-export function PersonNode({ data, selected }: NodeProps<{ data: PersonNodeData }>) {
-  const { person } = data as unknown as PersonNodeData;
+export function PersonNode({ data, selected }: NodeProps<PersonNodeType>) {
+  const { person } = data;
   const name = [person.firstName, person.lastName].filter(Boolean).join(' ') || 'Unknown';
   const years = [person.birthDate, person.deathDate].filter(Boolean).join(' – ');
 
@@ -13,9 +13,11 @@ export function PersonNode({ data, selected }: NodeProps<{ data: PersonNodeData 
     <div
       className={`w-[180px] bg-white rounded-lg shadow border-2 cursor-pointer select-none overflow-hidden
         ${selected ? 'border-blue-500' : 'border-gray-200'}
-        ${person.gender === 'M' ? 'border-t-blue-400' : person.gender === 'F' ? 'border-t-pink-400' : 'border-t-gray-400'}
       `}
-      style={{ borderTopWidth: 4 }}
+      style={{
+        borderTopWidth: 4,
+        borderTopColor: person.gender === 'M' ? '#60a5fa' : person.gender === 'F' ? '#f472b6' : '#9ca3af',
+      }}
     >
       <Handle type="target" position={Position.Top} className="!bg-gray-400" />
       <div className="flex items-center gap-2 p-2">
